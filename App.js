@@ -3,33 +3,35 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import {
   Button,
+  ImageBackground,
   LogBox,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import Home from './src/screens/Home';
 import Medicine from './src/screens/Medicine';
 import PatientData from './src/screens/PatientData';
 import Sales from './src/screens/Sales';
-// import Scanner from './src/screens/Scanner';
 
 const Stack = createNativeStackNavigator();
-// LogBox.ignoreAllLogs();
+LogBox.ignoreAllLogs();
 
 
 const App = () => {
-
+  
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName='Patient'
+        initialRouteName='Home'
       >
+        <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='Patient' component={PatientData} />
         <Stack.Screen name='Medicine' component={Medicine} />
         <Stack.Screen name='Sales' component={Sales} />
-        {/* <Stack.Screen name='Scanner' component={Scanner} /> */}
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
 

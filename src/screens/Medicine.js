@@ -6,11 +6,12 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View
+    View,
+    ImageBackground
 } from 'react-native';
 import axios from 'axios';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Medicine = ({ navigation }) => {
 
@@ -47,10 +48,13 @@ const Medicine = ({ navigation }) => {
                 data: { medicine: (medicine) },
                 dataType: 'json'
             });
-            console.log("API Response = ", response.data)
+            // if(response){
+            //     setMedicine(initialData)
+            // }
         } catch (error) {
             console.log("Api Error =", error);
         }
+        setMedicine(initialData)
     }
     const onSuccess = (e) => {
         if (e) {
@@ -62,86 +66,140 @@ const Medicine = ({ navigation }) => {
         setState(1);
     }
 
-    const goPatient = () => {
-        navigation.navigate("Patient");
-    }
-
     return (
         <Fragment>
-            {
-                state === 0 ?
-                    <View>
+            <ImageBackground
+                style={styles.background}
+                source={require('../images/Medicine.jpg')}
+                imageStyle={{ opacity: 0.4 }}
+            >
+                {
+                    state === 0 ?
                         <View>
+                             <Text style={styles.text}>BarCode</Text>
+                            <View style={styles.Barcode}>
+                               
+                                <TextInput
+                                    style={styles.inputStyle}
+                                    placeholder='Enter Barcode'
+                                    keyboardType='numeric'
+                                    onChangeText={(e) => handleChange(e, 'Barcode')}
+                                    defaultValue={codeValue}
+                                />
+                                <Pressable onPress={openScanner} style={styles.icon}>
+                                    <Icon name="barcode-scan" size={30} style={styles.icon} />
+                                </Pressable>
+                            </View>
+                            <Text style={styles.text}>Medicine Name</Text>
                             <TextInput
-                                placeholder='Enter Barcode'
-                                keyboardType='numeric'
-                                onChangeText={(e) => handleChange(e, 'Barcode')}
-                                defaultValue={codeValue}
+                                style={styles.textInput}
+                                placeholder='Enter MedicineName'
+                                value={medicine.MedicineName || ""}
+                                onChangeText={(e) => handleChange(e, 'MedicineName')}
                             />
-                            <Pressable onPress={openScanner}>
-                                <Icon name="barcode-scan" size={30} />
-                            </Pressable>
+                            <Text style={styles.text}>Company Name</Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='Enter CompanyName'
+                                value={medicine.CompanyName || ""}
+                                onChangeText={(e) => handleChange(e, 'CompanyName')}
+                            />
+                            <Text style={styles.text}>Category</Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='Enter Category'
+                                value={medicine.Category || ""}
+                                onChangeText={(e) => handleChange(e, 'Category')}
+                            />
+                            <Text style={styles.text}>Drug Type</Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='Enter DrugType'
+                                value={medicine.DrugType || ""}
+                                onChangeText={(e) => handleChange(e, 'DrugType')}
+                            />
+                            <Text style={styles.text}>Tax Category</Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='Enter TaxCategory'
+                                value={medicine.TaxCategory || ""}
+                                onChangeText={(e) => handleChange(e, 'TaxCategory')}
+                            />
+                            <Text style={styles.text}>HSN Code</Text>
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder='Enter HSN Code'
+                                value={medicine.HSNCode || ""}
+                                onChangeText={(e) => handleChange(e, 'HSNCode')}
+                            />
+                            <TouchableOpacity
+                                style={styles.submit}
+                                onPress={handleSubmit}
+                            >
+                                <Text style={styles.submitText}>Submit</Text>
+                            </TouchableOpacity>
                         </View>
-
-                        <TextInput
-                            placeholder='Enter MedicineName'
-                            value={medicine.MedicineName || ""}
-                            onChangeText={(e) => handleChange(e, 'MedicineName')}
-                        />
-                        <TextInput
-                            placeholder='Enter CompanyName'
-                            value={medicine.CompanyName || ""}
-                            onChangeText={(e) => handleChange(e, 'CompanyName')}
-                        />
-                        <TextInput
-                            placeholder='Enter Category'
-                            value={medicine.Category || ""}
-                            onChangeText={(e) => handleChange(e, 'Category')}
-                        />
-                        <TextInput
-                            placeholder='Enter DrugType'
-                            value={medicine.DrugType || ""}
-                            onChangeText={(e) => handleChange(e, 'DrugType')}
-                        />
-                        <TextInput
-                            placeholder='Enter TaxCategory'
-                            value={medicine.TaxCategory || ""}
-                            onChangeText={(e) => handleChange(e, 'TaxCategory')}
-                        />
-                        <TextInput
-                            placeholder='Enter HSNCode'
-                            value={medicine.HSNCode || ""}
-                            onChangeText={(e) => handleChange(e, 'HSNCode')}
-                        />
-                        <TouchableOpacity
-                            style={styles.text}
-                            onPress={handleSubmit}
-                        >
-                            <Text>Submit</Text>
-                        </TouchableOpacity>
-                        <Button title='Go to Patient' onPress={goPatient}></Button>
-                    </View>
-                    :
-                    <View>
-                        <QRCodeScanner
-                            onRead={(e) => onSuccess(e)}
-                        />
-                    </View>
-            }
-
-
+                        :
+                        <View>
+                            <QRCodeScanner
+                                onRead={(e) => onSuccess(e)}
+                            />
+                        </View>
+                }
+            </ImageBackground>
         </Fragment>
     )
 }
 
 styles = StyleSheet.create({
-    text: {
-        backgroundColor: "#ff0"
+    background: {
+        flex: 1,
     },
-    value: {
-        fontSize: 20,
+    // submit button
+    submit: {
+        marginRight: 40,
+        marginLeft: 40,
+        marginTop: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: '#1E6738',
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: '#fff'
+    },
+    submitText: {
+        color: '#fff',
         textAlign: 'center',
-        backgroundColor: "#0f0"
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    // Icon
+    icon: {
+        color: '#034',
+        paddingRight: 10,
+        paddingTop: 3.5,
+    },
+    // TextInput
+    textInput: {
+        borderColor: 'grey',
+        borderWidth: 1,
+        margin: 5,
+    },
+    //  Barcode TextInput only
+    Barcode: {
+        flexDirection: 'row',
+        borderColor: 'grey',
+        borderWidth: 1,
+        margin: 5,
+    },
+    inputStyle: {
+        flex: 1,
+    },
+    // All Text  
+    text : {
+        color : '#0f0',
+        fontWeight : 'bold',
+        backgroundColor : "#023055"
     }
 })
 export default Medicine
